@@ -12,7 +12,7 @@ mk-spot:
 
     if ! echo $spotinfo | grep -q {{spot-name}}; then
         echo "Creating {{spot-name}}"
-        gcloud compute instances create {{spot-name}} --project=astephe9-b8610af7fa5de6c7 --zone={{zone}} --machine-type=e2-standard-2 --network-interface=network-tier=PREMIUM,subnet=default --no-restart-on-failure --maintenance-policy=TERMINATE --provisioning-model=SPOT --instance-termination-action=STOP --service-account=1016493563194-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --create-disk=auto-delete=yes,boot=yes,device-name={{spot-name}},image=projects/debian-cloud/global/images/debian-11-bullseye-v20220920,mode=rw,size=10,type=projects/astephe9-b8610af7fa5de6c7/zones/us-west4-b/diskTypes/pd-balanced --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
+        gcloud compute instances create {{spot-name}} --project=astephe9-b8610af7fa5de6c7 --zone=us-east5-b --machine-type=e2-standard-2 --network-interface=address=34.162.230.23,network-tier=PREMIUM,subnet=default --no-restart-on-failure --maintenance-policy=TERMINATE --provisioning-model=SPOT --instance-termination-action=STOP --service-account=1016493563194-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --create-disk=auto-delete=yes,boot=yes,device-name=instance-1,image=projects/debian-cloud/global/images/debian-11-bullseye-v20220920,mode=rw,size=50,type=projects/astephe9-b8610af7fa5de6c7/zones/us-east5-b/diskTypes/pd-balanced --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
         spotinfo="$(gcloud compute instances list --filter="name=('{{spot-name}}')" 2>/dev/null)"
     fi
 
@@ -38,6 +38,6 @@ rm-spot:
     spotinfo="$(gcloud compute instances list --filter="name=('{{spot-name}}')" 2>/dev/null)"
 
     if echo $spotinfo | grep -q {{spot-name}}; then
-        echo "Creating {{spot-name}}"
-        gcloud compute instances delete {{spot-name}} --project=astephe9-b8610af7fa5de6c7 --zone={{zone}} ---delete-disks=all
+        echo "Deleting {{spot-name}}"
+        gcloud compute instances delete {{spot-name}} --project=astephe9-b8610af7fa5de6c7 --zone={{zone}} --delete-disks=all
     fi
